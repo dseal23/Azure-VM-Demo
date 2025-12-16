@@ -1,0 +1,20 @@
+variable "location" {
+  default = "eastus2"
+}
+
+variable "resource_group" {
+  default = "al2023-rg"
+}
+
+variable "vm_name" {
+  default = "al2023-vm"
+}
+
+variable "admin_username" {
+  default = "azureuser"
+}
+
+variable "ssh_public_key" {
+  description = "SSH public key"
+}
+
