@@ -38,27 +38,31 @@ data "azurerm_subnet" "subnet" {
 # ----------------------------
 # Public IP
 # ----------------------------
-resource "azurerm_public_ip" "pip" {
-  name                = "${var.vm_name}-pip"
-  location            = data.azurerm_resource_group.rg.location
-  resource_group_name = data.azurerm_resource_group.rg.name
-  allocation_method   = "Dynamic"
-  sku                 = "Basic"
-}
+#resource "azurerm_public_ip" "pip" {
+#  name                = "${var.vm_name}-pip"
+#  location            = data.azurerm_resource_group.rg.location
+#  resource_group_name = data.azurerm_resource_group.rg.name
+#  allocation_method   = "Dynamic"
+#  sku                 = "Basic"
+#}
 
 # ----------------------------
 # Network Interface
 # ----------------------------
+#resource "azurerm_network_interface" "nic" {
+ # name                = "${var.vm_name}-nic"
+  #location            = data.azurerm_resource_group.rg.location
+  #resource_group_name = data.azurerm_resource_group.rg.name 
 resource "azurerm_network_interface" "nic" {
   name                = "${var.vm_name}-nic"
-  location            = data.azurerm_resource_group.rg.location
+  location            = data.azurerm_virtual_network.vnet.location
   resource_group_name = data.azurerm_resource_group.rg.name
 
   ip_configuration {
     name                          = "ipconfig1"
     subnet_id                     = data.azurerm_subnet.subnet.id
     private_ip_address_allocation = "Dynamic"
-    public_ip_address_id           = azurerm_public_ip.pip.id
+#    public_ip_address_id           = azurerm_public_ip.pip.id
   }
 }
 
