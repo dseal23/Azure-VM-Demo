@@ -38,33 +38,34 @@ data "azurerm_subnet" "subnet" {
 # ----------------------------
 # Public IP
 # ----------------------------
-#resource "azurerm_public_ip" "pip" {
-#  name                = "${var.vm_name}-pip"
-#  location            = data.azurerm_resource_group.rg.location
-#  resource_group_name = data.azurerm_resource_group.rg.name
-#  allocation_method   = "Dynamic"
-#  sku                 = "Basic"
-#}
+# resource "azurerm_public_ip" "pip" {
+#   name                = "${var.vm_name}-pip"
+#   location            = data.azurerm_resource_group.rg.location
+#   resource_group_name = data.azurerm_resource_group.rg.name
+#   allocation_method   = "Dynamic"
+#   sku                 = "Basic"
+# }
 
 # ----------------------------
 # Network Interface
 # ----------------------------
-#resource "azurerm_network_interface" "nic" {
- # name                = "${var.vm_name}-nic"
-  #location            = data.azurerm_resource_group.rg.location
-  #resource_group_name = data.azurerm_resource_group.rg.name 
+# resource "azurerm_network_interface" "nic" {
+#   name                = "${var.vm_name}-nic"
+#   location            = eastus2
+#   resource_group_name = data.azurerm_resource_group.rg.name 
 resource "azurerm_network_interface" "nic" {
   name                = "${var.vm_name}-nic"
-  location            = data.azurerm_virtual_network.vnet.location
+  location            = "eastus2"
   resource_group_name = data.azurerm_resource_group.rg.name
 
   ip_configuration {
     name                          = "ipconfig1"
     subnet_id                     = data.azurerm_subnet.subnet.id
     private_ip_address_allocation = "Dynamic"
-#    public_ip_address_id           = azurerm_public_ip.pip.id
+    # public_ip_address_id        = azurerm_public_ip.pip.id
   }
 }
+
 
 # ----------------------------
 # Amazon Linux 2023 VM
@@ -72,7 +73,7 @@ resource "azurerm_network_interface" "nic" {
 resource "azurerm_linux_virtual_machine" "vm" {
   name                = var.vm_name
   resource_group_name = data.azurerm_resource_group.rg.name
-  location            = data.azurerm_resource_group.rg.location
+  location            = "eastus2"
   size                = var.vm_size
   admin_username      = var.admin_username
 
@@ -95,5 +96,12 @@ resource "azurerm_linux_virtual_machine" "vm" {
     offer     = var.vm_offer
     sku       = var.vm_sku
     version   = var.vm_version
+  }
+
+  # ---- PLAN BLOCK REQUIRED FOR MARKETPLACE IMAGE ----
+  plan {
+    name      = var.vm_sku
+    publisher = var.vm_publisher
+    product   = var.vm_offer
   }
 }

@@ -1,4 +1,4 @@
-*.tfvars
-.terraform/
 *.tfstate
 *.tfstate.backup
+*.tfvars.override
+*_working_image
